@@ -1,10 +1,12 @@
 package ru.daniiltserin.myapplication;
 
+import android.annotation.SuppressLint;
+//import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,9 +14,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    /**
+     * Fragment
+     */
+    FragmentGallary fragmentGallary;
+
+    /**
+     * import fragment for drawer layout
+     */
+    FragmentImport fragmentImport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,9 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        fragmentGallary = new FragmentGallary();
+        fragmentImport = new FragmentImport();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -77,6 +92,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Устанавливается действие на нажатие пунктов меню
+     *
      * @param item ссылка на
      * @return boolean
      */
@@ -86,9 +102,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        @SuppressLint("CommitTransaction") FragmentTransaction ft = getFragmentManager().beginTransaction();
+
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            ft.replace(R.id.container, fragmentImport);
         } else if (id == R.id.nav_gallery) {
+            ft.replace(R.id.container, fragmentGallary);
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -99,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
+        ft.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
