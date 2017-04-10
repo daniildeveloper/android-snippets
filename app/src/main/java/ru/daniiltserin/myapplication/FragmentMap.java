@@ -1,10 +1,16 @@
 package ru.daniiltserin.myapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,15 +99,30 @@ public class FragmentMap extends Fragment {
             public void onMapReady(GoogleMap googleMap) {
                 googleMapP = googleMap;
 
-                //for showing and move to my location button
+                //for showing and move to my locatio
 
-//                googleMapP.setMyLocationEnabled(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+                        if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                }
+                googleMapP.setMyLocationEnabled(true);
 
                 LatLng sydney = new LatLng(-34, 151);
                 googleMapP.addMarker(new MarkerOptions()
                         .position(sydney)
                         .title("Marker to Sydney")
                         .snippet("Marker description"));
+                googleMapP.getUiSettings().setAllGesturesEnabled(true);
+                googleMapP.getUiSettings().setCompassEnabled(true);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
                 googleMapP.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
