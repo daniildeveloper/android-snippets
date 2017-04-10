@@ -16,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     /**
@@ -27,6 +30,14 @@ public class MainActivity extends AppCompatActivity
      * import fragment for drawer layout
      */
     FragmentImport fragmentImport;
+
+    FragmentMap fm;
+
+    /**
+     * map fragmentto call this instance
+     */
+    FragmentMap fragmentMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,7 @@ public class MainActivity extends AppCompatActivity
 
         fragmentGallary = new FragmentGallary();
         fragmentImport = new FragmentImport();
+        fm = new FragmentMap();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -118,6 +130,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_map) {
+            ft.replace(R.id.container, fm);
         }
         ft.commit();
 
